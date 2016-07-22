@@ -9,32 +9,35 @@ public class Drop {
     private int velocity, length, x, y;
     private char[][] text;
 
-    Drop(int x) {
+    Drop(int x, String tweetString) {
         this.x = x;
-        length = getRandomInteger(5, 30);
-        text = createContent(length);
+        length = tweetString.length();
+        text = createContent(tweetString);
         velocity = getRandomInteger(1, 5);
         this.y = (-1) * length * Config.FONT_SIZE;
     }
 
-    protected char[][] createContent(int length) {
-        char[][] result = new char[length][1];
-        for (int i = 0; i < result.length; i++) {
-            result[i][0] = getRandomCharacter();
+    private char[][] createContent(String tweetString) {
+        int tweetLength = tweetString.length();
+        char[][] result = new char[tweetLength][1];
+        for (int i = 0; i < tweetLength; i++) {
+            result[i][0] = tweetString.charAt(i);
         }
         return result;
     }
 
+
+
     public void draw(Graphics2D g2) {
         int fontSize = g2.getFont().getSize();
         for (int i = 0; i < length; i++) {
-            if (getRandomInteger(0, length) == i)
-                text[i][0] = getRandomCharacter();
+//            if (getRandomInteger(0, length) == i)
+//                text[i][0] = getRandomCharacter();
             if (i == length - 1)
                 g2.setColor(new Color(253, 104, 25));
-            else
-                g2.setColor(new Color(66, 198, 255));
-            g2.drawChars(text[i], 0, 1, x, y + (i * fontSize));
+//            else
+//                g2.setColor(new Color(66, 198, 255));
+            g2.drawChars(text[i], 0, 1,  y + (i * fontSize),x);
         }
         y += velocity;
     }
