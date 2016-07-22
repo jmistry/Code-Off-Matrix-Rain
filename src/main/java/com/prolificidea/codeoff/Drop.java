@@ -14,7 +14,7 @@ public class Drop {
         length = tweetString.length();
         text = createContent(tweetString);
         velocity = getRandomInteger(1, 5);
-        this.y = (-1) * length * Config.FONT_SIZE;
+        this.y = (+1) * length * Config.FONT_SIZE;
     }
 
     private char[][] createContent(String tweetString) {
@@ -26,24 +26,17 @@ public class Drop {
         return result;
     }
 
-
-
-    public void draw(Graphics2D g2) {
+    public void draw(Graphics2D g2, com.prolificidea.codeoff.SimpleImage simpleImage) {
         int fontSize = g2.getFont().getSize();
+        int blockSize = Config.SCREEN_SIZE / Config.FONT_SIZE;
         for (int i = 0; i < length; i++) {
-//            if (getRandomInteger(0, length) == i)
-//                text[i][0] = getRandomCharacter();
-            if (i == length - 1)
-                g2.setColor(new Color(253, 104, 25));
-//            else
-//                g2.setColor(new Color(66, 198, 255));
-            g2.drawChars(text[i], 0, 1,  y + (i * fontSize),x);
+            g2.setColor(new Color(253, 104, 25));
+            if (y > 0 && y < Config.SCREEN_SIZE && simpleImage.getBlockImage()[x / blockSize][y / blockSize]) {
+                g2.setColor(new Color(66, 198, 255));
+            }
+            g2.drawChars(text[i], 0, 1, x, y + (i * fontSize));
         }
-        y += velocity;
-    }
-
-    public char getRandomCharacter() {
-        return (char) (rng.nextInt(26) + 'a');
+        y -= velocity;
     }
 
     public int getRandomInteger(int min, int max) {
@@ -52,46 +45,7 @@ public class Drop {
     }
 
     public boolean isOffScreen() {
-        return (y > Config.SCREEN_SIZE);
+        return y + text.length < 0;
     }
 
-    /*public int getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(int velocity) {
-        this.velocity = velocity;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public char[][] getText() {
-        return text;
-    }
-
-    public void setText(char[][] text) {
-        this.text = text;
-    }*/
 }

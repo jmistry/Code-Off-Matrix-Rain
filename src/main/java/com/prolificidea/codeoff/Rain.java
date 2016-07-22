@@ -12,12 +12,18 @@ import java.util.Random;
 
 public class Rain extends JPanel {
 
+    public static final int REFRESH_RATE = 20;
+    public static final int TWEET_REFRESH = 120000;
+    private final com.prolificidea.codeoff.SimpleImage simpleImage;
+    private int tweetTime;
     private Drop[] drops;
-    private Random rng=new Random();
+    private Random rng = new Random();
     List<String> tweets;
 
-    Rain() {
+    public Rain(com.prolificidea.codeoff.SimpleImage simpleImage) {
+        this.simpleImage = simpleImage;
         this.tweets = TweetSearcher.getTweets();
+        this.tweetTime = 0;
         drops = new Drop[Config.SCREEN_SIZE / Config.FONT_SIZE];
         for (int i = 0; i < drops.length; i++) {
             String randomTweet = getRandomTweet();
@@ -26,7 +32,7 @@ public class Rain extends JPanel {
     }
 
     private String getRandomTweet() {
-        return tweets.get(getRandomInteger(0, tweets.size()-1));
+        return tweets.get(getRandomInteger(0, tweets.size() - 1));
     }
 
     public int getRandomInteger(int min, int max) {
@@ -47,16 +53,20 @@ public class Rain extends JPanel {
             if (drops[i].isOffScreen()) {
                 drops[i] = new Drop(i * Config.FONT_SIZE, getRandomTweet());
             }
-            drops[i].draw(g2);
+            drops[i].draw(g2, simpleImage);
         }
 
         try {
-            Thread.sleep(10);
+            Thread.sleep(REFRESH_RATE);
+            this.tweetTime += REFRESH_RATE;
+            if (tweetTime > TWEET_REFRESH) {
+                this.tweets = TweetSearcher.getTweets();
+                this.tweetTime = 0;
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         repaint();
     }
-
 }

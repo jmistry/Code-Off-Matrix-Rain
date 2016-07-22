@@ -26,10 +26,11 @@ public class TweetSearcher {
                 }
             } while ((query = result.nextQuery()) != null);
         } catch (TwitterException te) {
-            te.printStackTrace();
-            System.out.println("Failed to search tweets: " + te.getMessage());
-            System.exit(-1);
+            tweetList.add("No tweets found ");
+            tweetList.add("No tweets found , ah what a pity");
+            tweetList.add("No tweets found , ah what a pity, this is quite sad");
         }
+
         return tweetList;
     }
 }
